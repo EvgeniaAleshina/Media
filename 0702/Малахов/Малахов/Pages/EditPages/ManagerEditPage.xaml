@@ -1,0 +1,35 @@
+﻿<Page x:Class="Малахов.TypesEditPages"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Малахов"
+      mc:Ignorable="d" 
+      d:DesignHeight="200" d:DesignWidth="300"
+            VerticalAlignment="Center" HorizontalAlignment="Center"
+      Title="TypesEditPages" Loaded="Page_Loaded">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Фамилия" Grid.Row="0"/>
+        <TextBlock Text="Имя" Grid.Row="1"/>
+        <TextBlock Text="Отчество" Grid.Row="2"/>
+
+        <TextBox Text="{Binding Surname}" Name="TbSurname" Grid.Column="1"/>
+        <TextBox Text="{Binding FirstName}" Name="TbFirstName" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Text="{Binding Patronymic}" Name="TbPatronymic" Grid.Column="1" Grid.Row="2"/>
+        <ComboBox Name="CbLogin" SelectedItem="{Binding User}" DisplayMemberPath="login" Grid.Column="1" Grid.Row="3"/>
+
+        <Button Content="Сохранить" Grid.ColumnSpan="2" Grid.Row="5" Name="BtnSave" Click="BtnSave_Click"/>
+    </Grid>
+</Page>

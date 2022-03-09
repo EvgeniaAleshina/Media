@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MediaGrModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="MediaGrEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="MediaGrModel.Client" />
+    <EntitySet Name="Orders" EntityType="MediaGrModel.Order" />
+    <EntitySet Name="Services" EntityType="MediaGrModel.Service" />
+    <EntitySet Name="sysdiagrams" EntityType="MediaGrModel.sysdiagram" />
+    <EntitySet Name="Types" EntityType="MediaGrModel.Type" />
+    <EntitySet Name="Users" EntityType="MediaGrModel.User" />
+    <AssociationSet Name="FK_Order_Client" Association="MediaGrModel.FK_Order_Client">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Order_Service" Association="MediaGrModel.FK_Order_Service">
+      <End Role="Service" EntitySet="Services" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Service_Type" Association="MediaGrModel.FK_Service_Type">
+      <End Role="Type" EntitySet="Types" />
+      <End Role="Service" EntitySet="Services" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="c_ID" />
+    </Key>
+    <Property Name="c_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="c_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="c_patronymic" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="c_surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="c_phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="c_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Orders" Relationship="MediaGrModel.FK_Order_Client" FromRole="Client" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="order_ID" />
+    </Key>
+    <Property Name="order_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="o_client_ID" Type="Int32" Nullable="false" />
+    <Property Name="o_service_ID" Type="Int32" Nullable="false" />
+    <Property Name="o_count" Type="Int32" Nullable="false" />
+    <Property Name="o_duraction" Type="Int32" Nullable="false" />
+    <Property Name="o_count_day" Type="Int32" Nullable="false" />
+    <Property Name="o_price" Type="Int32" />
+    <NavigationProperty Name="Client" Relationship="MediaGrModel.FK_Order_Client" FromRole="Order" ToRole="Client" />
+    <NavigationProperty Name="Service" Relationship="MediaGrModel.FK_Order_Service" FromRole="Order" ToRole="Service" />
+  </EntityType>
+  <EntityType Name="Service">
+    <Key>
+      <PropertyRef Name="s_ID" />
+    </Key>
+    <Property Name="s_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="s_cost" Type="Decimal" Nullable="false" Precision="7" Scale="2" />
+    <Property Name="s_type_ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="MediaGrModel.FK_Order_Service" FromRole="Service" ToRole="Order" />
+    <NavigationProperty Name="Type" Relationship="MediaGrModel.FK_Service_Type" FromRole="Service" ToRole="Type" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Type">
+    <Key>
+      <PropertyRef Name="t_ID" />
+    </Key>
+    <Property Name="t_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="t_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Services" Relationship="MediaGrModel.FK_Service_Type" FromRole="Type" ToRole="Service" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Order_Client">
+    <End Type="MediaGrModel.Client" Role="Client" Multiplicity="1" />
+    <End Type="MediaGrModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="c_ID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="o_client_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Order_Service">
+    <End Type="MediaGrModel.Service" Role="Service" Multiplicity="1" />
+    <End Type="MediaGrModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Service">
+        <PropertyRef Name="s_ID" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="o_service_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Service_Type">
+    <End Type="MediaGrModel.Type" Role="Type" Multiplicity="1" />
+    <End Type="MediaGrModel.Service" Role="Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="t_ID" />
+      </Principal>
+      <Dependent Role="Service">
+        <PropertyRef Name="s_type_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
